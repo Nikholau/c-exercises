@@ -20,7 +20,6 @@
 #define P_SPRITE "sprites/p.png"
 #define I_SPRITE "sprites/i.png"
 #define C_SPRITE "sprites/c.png"
-#define MAP_SPRITE "sprites/mapaoverlay.png"
 #define FONT "fonts/arial.ttf"
 #define MAIN_SONG "sounds/cyberTheme.wav"
 #define PACMAN_CHOMP "sounds/pacmanChomp.wav"
@@ -74,7 +73,6 @@ int main(void)
   ALLEGRO_BITMAP *p_sprite = al_load_bitmap(P_SPRITE);
   ALLEGRO_BITMAP *i_sprite = al_load_bitmap(I_SPRITE);
   ALLEGRO_BITMAP *c_sprite = al_load_bitmap(C_SPRITE);
-  ALLEGRO_BITMAP *map_sprite = al_load_bitmap(MAP_SPRITE);
 
   if (!pacman_sprite || !b_sprite || !p_sprite || !i_sprite || !c_sprite)
   {
@@ -264,7 +262,6 @@ int main(void)
       redraw = false;
       al_clear_to_color(al_map_rgb(0, 0, 0));
       gameMap.renderMap(mapa);
-      al_draw_bitmap(map_sprite, 0, -32, 0);
 
       playerPacman.renderPacman(pacman_sprite, sprite);
       ghostVet[0]->renderGhost(c_sprite, sprite);
