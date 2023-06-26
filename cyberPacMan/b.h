@@ -1,7 +1,8 @@
-#ifndef B
-#define B
+#ifndef B_H
+#define B_H
 
 #include "ghost.h"
+
 class B : public Ghost
 {
 public:
@@ -10,4 +11,4 @@ public:
   void renderB(ALLEGRO_BITMAP *imgB, int sprite);
 };
 
-#endif // !B
+#endif // B_H

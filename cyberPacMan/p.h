@@ -1,7 +1,8 @@
-#ifndef P
-#define P
+#ifndef P_H
+#define P_H
 
 #include "ghost.h"
+
 class P : public Ghost
 {
 public:
@@ -10,4 +11,4 @@ public:
   void renderP(ALLEGRO_BITMAP *imgP, int sprite);
 };
 
-#endif // !P
+#endif // P_H

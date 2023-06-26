@@ -1,7 +1,8 @@
-#ifndef I
-#define I
+#ifndef I_H
+#define I_H
 
 #include "ghost.h"
+
 class I : public Ghost
 {
 public:
@@ -10,4 +11,4 @@ public:
   void renderI(ALLEGRO_BITMAP *imgI, int sprite);
 };
 
-#endif // !I
+#endif // I_H
