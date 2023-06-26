@@ -10,6 +10,18 @@ Pacman::Pacman(int x, int y) : Entity()
   entitySize = 32;
   score = 0;
 }
+Pacman::~Pacman()
+{
+  // Destructor
+}
+
+// "Get" functions
+int Pacman::getScore()
+{
+  return score;
+}
+
+// Collision functions
 void Pacman::checkCoinCollision(std::vector<std::vector<char>> &map, ALLEGRO_SAMPLE *pacmanChomp)
 {
   if (map[getEntityConvertedY()][getEntityConvertedX()] == '1')
@@ -18,14 +30,6 @@ void Pacman::checkCoinCollision(std::vector<std::vector<char>> &map, ALLEGRO_SAM
     map[getEntityConvertedY()][getEntityConvertedX()] = '2';
     score++;
   }
-}
-int Pacman::getScore()
-{
-  return score;
-}
-void Pacman::renderPacman(ALLEGRO_BITMAP *imgPacman, int sprite)
-{
-  al_draw_bitmap_region(imgPacman, direction * entityWidth, sprite * entityHeight, entityWidth, entityHeight, getEntityX(), getEntityY(), 0);
 }
 bool Pacman::checkGhostCollision(B &f1, P &f2, I &f3, C &f4)
 {
@@ -47,6 +51,9 @@ bool Pacman::checkGhostCollision(B &f1, P &f2, I &f3, C &f4)
   }
   return false;
 }
-Pacman::~Pacman()
+
+// Misc. functions
+void Pacman::renderPacman(ALLEGRO_BITMAP *imgPacman, int sprite)
 {
+  al_draw_bitmap_region(imgPacman, direction * entityWidth, sprite * entityHeight, entityWidth, entityHeight, getEntityX(), getEntityY(), 0);
 }

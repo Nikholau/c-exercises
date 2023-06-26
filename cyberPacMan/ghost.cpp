@@ -3,347 +3,246 @@
 Ghost::Ghost()
 {
   moveSpeed = 2.0;
-  entityHeight = 32;
-  entityWidth = 32;
-  entitySize = 32;
-  randomDirection = 0;
+  entityHeight = entityWidth = entitySize = 32;
+  ghostType = 0;
 }
 
 Ghost::~Ghost() {}
 
-void Ghost::newDirection(std::vector<std::vector<char>> map)
+void Ghost::randomDirection(std::vector<std::vector<char>> map)
 {
-  bool canGoUp, canGoDown, canGoLeft, canGoRight;
+  int aux = 0;
+  int possibilities = 0;
+  int directions[4];
 
-  if (checkEntityCollisionUp(map))
+  for (int i = 0; i < 4; i++)
   {
-    canGoUp = true;
+    directions[i] = 0;
+  }
+
+  // Special conditions to avoid ghosts being stuck in the spawn box
+  if (this->getEntityConvertedX() == 8 && this->getEntityConvertedY() == 9)
+  {
+    this->setNextMove(ALLEGRO_KEY_RIGHT, map);
+    return;
+  }
+  else if (this->getEntityConvertedX() == 9 && this->getEntityConvertedY() == 9)
+  {
+    this->setNextMove(ALLEGRO_KEY_UP, map);
+    return;
+  }
+  else if (this->getEntityConvertedX() == 10 && this->getEntityConvertedY() == 9)
+  {
+    this->setNextMove(ALLEGRO_KEY_LEFT, map);
+    return;
+  }
+  else if (this->getEntityConvertedX() == 9 && this->getEntityConvertedY() == 8)
+  {
+    this->setNextMove(ALLEGRO_KEY_UP, map);
+    return;
+  }
+
+  if (moveLeft == true)
+  {
+    // Check for collision with entities on the left
+    if (checkEntityCollisionLeft(map) == true)
+    {
+      directions[possibilities] = ALLEGRO_KEY_LEFT;
+      possibilities++;
+    }
+    // Check for collision with entities above
+    if (checkEntityCollisionUp(map) == true)
+    {
+      directions[possibilities] = ALLEGRO_KEY_UP;
+      possibilities++;
+    }
+    // Check for collision with entities below
+    if (checkEntityCollisionDown(map) == true)
+    {
+      directions[possibilities] = ALLEGRO_KEY_DOWN;
+      possibilities++;
+    }
+
+    srand(time(NULL));
+
+    // If there are possible directions to move
+    if (possibilities > 0)
+    {
+      aux = rand() % possibilities;
+
+      this->nextMove = directions[aux];
+    }
+  }
+  else if (moveRight == true)
+  {
+    // Check for collision with entities on the right
+    if (checkEntityCollisionRight(map) == true)
+    {
+      directions[possibilities] = ALLEGRO_KEY_RIGHT;
+      possibilities++;
+    }
+    // Check for collision with entities above
+    if (checkEntityCollisionUp(map) == true)
+    {
+      directions[possibilities] = ALLEGRO_KEY_UP;
+      possibilities++;
+    }
+    // Check for collision with entities below
+    if (checkEntityCollisionDown(map) == true)
+    {
+      directions[possibilities] = ALLEGRO_KEY_DOWN;
+      possibilities++;
+    }
+
+    srand(time(NULL));
+
+    // If there are possible directions to move
+    if (possibilities > 0)
+    {
+      aux = rand() % possibilities;
+
+      this->nextMove = directions[aux];
+    }
+  }
+  else if (moveUp == true)
+  {
+    // Check for collision with entities on the left
+    if (checkEntityCollisionLeft(map) == true)
+    {
+      directions[possibilities] = ALLEGRO_KEY_LEFT;
+      possibilities++;
+    }
+    // Check for collision with entities on the right
+    if (checkEntityCollisionRight(map) == true)
+    {
+      directions[possibilities] = ALLEGRO_KEY_RIGHT;
+      possibilities++;
+    }
+    // Check for collision with entities above
+    if (checkEntityCollisionUp(map) == true)
+    {
+      directions[possibilities] = ALLEGRO_KEY_UP;
+      possibilities++;
+    }
+
+    srand(time(NULL));
+
+    // If there are possible directions to move
+    if (possibilities > 0)
+    {
+      aux = rand() % possibilities;
+
+      this->nextMove = directions[aux];
+    }
+  }
+  else if (moveDown == true)
+  {
+    // Check for collision with entities on the left
+    if (checkEntityCollisionLeft(map) == true)
+    {
+      directions[possibilities] = ALLEGRO_KEY_LEFT;
+      possibilities++;
+    }
+    // Check for collision with entities on the right
+    if (checkEntityCollisionRight(map) == true)
+    {
+      directions[possibilities] = ALLEGRO_KEY_RIGHT;
+      possibilities++;
+    }
+    // Check for collision with entities below
+    if (checkEntityCollisionDown(map) == true)
+    {
+      directions[possibilities] = ALLEGRO_KEY_DOWN;
+      possibilities++;
+    }
+
+    srand(time(NULL));
+
+    // If there are possible directions to move
+    if (possibilities > 0)
+    {
+      aux = rand() % possibilities;
+
+      this->nextMove = directions[aux];
+    }
   }
   else
   {
-    canGoUp = false;
-  }
-
-  if (checkEntityCollisionDown(map))
-  {
-    canGoDown = true;
-  }
-  else
-  {
-    canGoDown = false;
-  }
-
-  if (checkEntityCollisionLeft(map))
-  {
-    canGoLeft = true;
-  }
-  else
-  {
-    canGoLeft = false;
-  }
-
-  if (checkEntityCollisionRight(map))
-  {
-    canGoRight = true;
-  }
-  else
-  {
-    canGoRight = false;
-  }
-
-  if (canGoLeft && !canGoRight && !canGoUp && !canGoDown)
-  {
-    checkEntityMovement(ALLEGRO_KEY_LEFT, map);
-  }
-
-  if (!canGoLeft && canGoRight && !canGoUp && !canGoDown)
-  {
-    checkEntityMovement(ALLEGRO_KEY_RIGHT, map);
-  }
-
-  if (!canGoLeft && !canGoRight && canGoUp && !canGoDown)
-  {
-    checkEntityMovement(ALLEGRO_KEY_UP, map);
-  }
-
-  if (!canGoLeft && !canGoRight && !canGoUp && canGoDown)
-  {
-    checkEntityMovement(ALLEGRO_KEY_DOWN, map);
-  }
-
-  if (canGoUp && canGoLeft)
-  {
-    randomDirection = std::rand() % 2;
-    if (randomDirection == 0)
+    // Check for collision with entities on the left
+    if (checkEntityCollisionLeft(map) == true)
     {
-      checkEntityMovement(ALLEGRO_KEY_UP, map);
+      directions[possibilities] = ALLEGRO_KEY_LEFT;
+      possibilities++;
     }
-    else
+    // Check for collision with entities on the right
+    if (checkEntityCollisionRight(map) == true)
     {
-      checkEntityMovement(ALLEGRO_KEY_LEFT, map);
+      directions[possibilities] = ALLEGRO_KEY_RIGHT;
+      possibilities++;
+    }
+    // Check for collision with entities above
+    if (checkEntityCollisionUp(map) == true)
+    {
+      directions[possibilities] = ALLEGRO_KEY_UP;
+      possibilities++;
+    }
+    // Check for collision with entities below
+    if (checkEntityCollisionDown(map) == true)
+    {
+      directions[possibilities] = ALLEGRO_KEY_DOWN;
+      possibilities++;
+    }
+
+    srand(time(NULL));
+
+    // If there are possible directions to move
+    if (possibilities > 0)
+    {
+      aux = rand() % possibilities;
+
+      this->nextMove = directions[aux];
     }
   }
 
-  if (canGoUp && canGoDown)
-  {
-    randomDirection = std::rand() % 2;
-    if (randomDirection == 0)
-    {
-      checkEntityMovement(ALLEGRO_KEY_UP, map);
-    }
-    else
-    {
-      checkEntityMovement(ALLEGRO_KEY_DOWN, map);
-    }
-  }
-
-  if (canGoUp && canGoRight)
-  {
-    randomDirection = std::rand() % 2;
-    if (randomDirection == 0)
-    {
-      checkEntityMovement(ALLEGRO_KEY_UP, map);
-    }
-    else
-    {
-      checkEntityMovement(ALLEGRO_KEY_RIGHT, map);
-    }
-  }
-
-  if (canGoDown && canGoLeft)
-  {
-    randomDirection = std::rand() % 2;
-    if (randomDirection == 0)
-    {
-      checkEntityMovement(ALLEGRO_KEY_DOWN, map);
-    }
-    else
-    {
-      checkEntityMovement(ALLEGRO_KEY_LEFT, map);
-    }
-  }
-
-  if (canGoDown && canGoRight)
-  {
-    randomDirection = std::rand() % 2;
-    if (randomDirection == 0)
-    {
-      checkEntityMovement(ALLEGRO_KEY_DOWN, map);
-    }
-    else
-    {
-      checkEntityMovement(ALLEGRO_KEY_RIGHT, map);
-    }
-  }
-
-  if (canGoLeft && canGoRight)
-  {
-    randomDirection = std::rand() % 2;
-    if (randomDirection == 0)
-    {
-      checkEntityMovement(ALLEGRO_KEY_LEFT, map);
-    }
-    else
-    {
-      checkEntityMovement(ALLEGRO_KEY_RIGHT, map);
-    }
-  }
-
-  if (canGoUp && canGoLeft && canGoRight)
-  {
-    randomDirection = std::rand() % 3;
-    if (randomDirection == 0)
-    {
-      checkEntityMovement(ALLEGRO_KEY_UP, map);
-    }
-    else if (randomDirection == 1)
-    {
-      checkEntityMovement(ALLEGRO_KEY_LEFT, map);
-    }
-    else
-    {
-      checkEntityMovement(ALLEGRO_KEY_RIGHT, map);
-    }
-  }
-
-  if (canGoUp && canGoLeft && canGoDown)
-  {
-    randomDirection = std::rand() % 3;
-    if (randomDirection == 0)
-    {
-      checkEntityMovement(ALLEGRO_KEY_UP, map);
-    }
-    else if (randomDirection == 1)
-    {
-      checkEntityMovement(ALLEGRO_KEY_LEFT, map);
-    }
-    else
-    {
-      checkEntityMovement(ALLEGRO_KEY_DOWN, map);
-    }
-  }
-
-  if (canGoUp && canGoRight && canGoDown)
-  {
-    randomDirection = std::rand() % 3;
-    if (randomDirection == 0)
-    {
-      checkEntityMovement(ALLEGRO_KEY_UP, map);
-    }
-    else if (randomDirection == 1)
-    {
-      checkEntityMovement(ALLEGRO_KEY_RIGHT, map);
-    }
-    else
-    {
-      checkEntityMovement(ALLEGRO_KEY_DOWN, map);
-    }
-  }
-
-  if (canGoDown && canGoLeft && canGoRight)
-  {
-    randomDirection = std::rand() % 3;
-    if (randomDirection == 0)
-    {
-      checkEntityMovement(ALLEGRO_KEY_DOWN, map);
-    }
-    else if (randomDirection == 1)
-    {
-      checkEntityMovement(ALLEGRO_KEY_LEFT, map);
-    }
-    else
-    {
-      checkEntityMovement(ALLEGRO_KEY_RIGHT, map);
-    }
-  }
-
-  if (canGoDown && canGoUp && canGoLeft && canGoRight)
-  {
-    randomDirection = std::rand() % 4;
-    if (randomDirection == 0)
-    {
-      checkEntityMovement(ALLEGRO_KEY_DOWN, map);
-    }
-    else if (randomDirection == 1)
-    {
-      checkEntityMovement(ALLEGRO_KEY_UP, map);
-    }
-    else if (randomDirection == 2)
-    {
-      checkEntityMovement(ALLEGRO_KEY_LEFT, map);
-    }
-    else
-    {
-      checkEntityMovement(ALLEGRO_KEY_RIGHT, map);
-    }
-  }
+  checkRandomDirection(map);
 }
 
-void Ghost::moveRandom(std::vector<std::vector<char>> map)
+void Ghost::checkRandomDirection(std::vector<std::vector<char>> mapa)
 {
-  bool isWalking;
-
-  if (moveUp || moveDown || moveLeft || moveRight)
+  // moveUp
+  if (this->nextMove == ALLEGRO_KEY_UP && checkEntityCollisionUp(mapa) == true && moveDown != true && moveUp != true)
   {
-    isWalking = true;
+    moveUp = true;
+    moveDown = false;
+    moveLeft = false;
+    moveRight = false;
+    direction = 3;
   }
-  else
+  // moveDown
+  if (this->nextMove == ALLEGRO_KEY_DOWN && checkEntityCollisionDown(mapa) == true && moveUp != true && moveDown != true)
   {
-    isWalking = false;
+    moveDown = true;
+    moveUp = false;
+    moveLeft = false;
+    moveRight = false;
+    direction = 1;
   }
-
-  if (isWalking && checkEntityCollisionUp(map) && checkEntityCollisionDown(map) && checkEntityCollisionLeft(map) && checkEntityCollisionRight(map))
+  // moveLeft
+  if (this->nextMove == ALLEGRO_KEY_LEFT && checkEntityCollisionLeft(mapa) == true && moveRight != true && moveLeft != true)
   {
-    newDirection(map);
+    moveLeft = true;
+    moveUp = false;
+    moveDown = false;
+    moveRight = false;
+    direction = 2;
   }
-
-  if (isWalking && checkEntityCollisionUp(map) && checkEntityCollisionDown(map) && checkEntityCollisionLeft(map))
+  // moveRight
+  if (this->nextMove == ALLEGRO_KEY_RIGHT && checkEntityCollisionRight(mapa) == true && moveLeft != true && moveRight != true)
   {
-    newDirection(map);
+    moveRight = true;
+    moveUp = false;
+    moveDown = false;
+    moveLeft = false;
+    direction = 0;
   }
-
-  if (isWalking && checkEntityCollisionUp(map) && checkEntityCollisionDown(map) && checkEntityCollisionRight(map))
-  {
-    newDirection(map);
-  }
-
-  if (isWalking && checkEntityCollisionUp(map) && checkEntityCollisionRight(map) && checkEntityCollisionLeft(map))
-  {
-    newDirection(map);
-  }
-
-  if (isWalking && checkEntityCollisionDown(map) && checkEntityCollisionLeft(map) && checkEntityCollisionRight(map))
-  {
-    newDirection(map);
-  }
-
-  if (isWalking && checkEntityCollisionDown(map) && checkEntityCollisionLeft(map) && checkEntityCollisionUp(map))
-  {
-    newDirection(map);
-  }
-
-  if (isWalking && checkEntityCollisionDown(map) && checkEntityCollisionRight(map) && checkEntityCollisionUp(map))
-  {
-    newDirection(map);
-  }
-
-  if (isWalking && checkEntityCollisionLeft(map) && checkEntityCollisionRight(map) && checkEntityCollisionUp(map))
-  {
-    newDirection(map);
-  }
-
-  if (isWalking && checkEntityCollisionDown(map) && checkEntityCollisionLeft(map))
-  {
-    newDirection(map);
-  }
-
-  if (isWalking && checkEntityCollisionDown(map) && checkEntityCollisionRight(map))
-  {
-    newDirection(map);
-  }
-
-  if (isWalking && checkEntityCollisionUp(map) && checkEntityCollisionLeft(map))
-  {
-    newDirection(map);
-  }
-
-  if (isWalking && checkEntityCollisionUp(map) && checkEntityCollisionRight(map))
-  {
-    newDirection(map);
-  }
-
-  if (isWalking && checkEntityCollisionLeft(map) && checkEntityCollisionRight(map))
-  {
-    newDirection(map);
-  }
-
-  if (isWalking && checkEntityCollisionUp(map) && checkEntityCollisionDown(map))
-  {
-    newDirection(map);
-  }
-
-  if (isWalking && checkEntityCollisionLeft(map))
-  {
-    newDirection(map);
-  }
-
-  if (isWalking && checkEntityCollisionRight(map))
-  {
-    newDirection(map);
-  }
-
-  if (isWalking && checkEntityCollisionUp(map))
-  {
-    newDirection(map);
-  }
-
-  if (isWalking && checkEntityCollisionDown(map))
-  {
-    newDirection(map);
-  }
-}
-
-void Ghost::update(std::vector<std::vector<char>> map)
-{
-  moveRandom(map);
 }

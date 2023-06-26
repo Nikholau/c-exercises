@@ -8,7 +8,8 @@ class I : public Ghost
 public:
   I(int x, int y);
   ~I();
-  void renderI(ALLEGRO_BITMAP *imgI, int sprite);
+  virtual void renderGhost(ALLEGRO_BITMAP *img, int sprite);
+  virtual void chasePacman(std::vector<std::vector<char>> mapa, int pacmanX, int pacmanY);
 };
 
 #endif // I_H
