@@ -52,7 +52,7 @@ bool Pacman::checkGhostCollision(B &f1, P &f2, I &f3, C &f4)
   return false;
 }
 
-// Misc. functions
+ 
 void Pacman::renderPacman(ALLEGRO_BITMAP *imgPacman, int sprite)
 {
   al_draw_bitmap_region(imgPacman, direction * entityWidth, sprite * entityHeight, entityWidth, entityHeight, getEntityX(), getEntityY(), 0);

@@ -21,14 +21,13 @@ void B::chasePacman(std::vector<std::vector<char>> map, int pacX, int pacY)
   };
 
   if (bX == 9 && bY == 8)
-  { // Prevent B from going back into the box
+  {
     this->setNextMove(ALLEGRO_KEY_UP, map);
     return;
   }
 
   if (bX > pacX && bY > pacY)
-  { // B is to the right of Pacman and below Pacman
-    // PRIORITY: MOVE LEFT -> MOVE UP
+  {
     if (currentMove != RIGHT && checkEntityCollisionLeft(map))
     {
       this->setNextMove(ALLEGRO_KEY_LEFT, map);
@@ -51,8 +50,7 @@ void B::chasePacman(std::vector<std::vector<char>> map, int pacX, int pacY)
     }
   }
   else if (bX > pacX && bY < pacY)
-  { // B is to the right of Pacman and above Pacman
-    // PRIORITY: MOVE LEFT -> MOVE DOWN
+  {
     if (currentMove != RIGHT && checkEntityCollisionLeft(map))
     {
       this->setNextMove(ALLEGRO_KEY_LEFT, map);
@@ -75,8 +73,7 @@ void B::chasePacman(std::vector<std::vector<char>> map, int pacX, int pacY)
     }
   }
   else if (bX > pacX && bY == pacY)
-  { // B is to the right of Pacman and at the same height as Pacman
-    // PRIORITY: MOVE LEFT -> MOVE DOWN
+  {
     if (currentMove != RIGHT && checkEntityCollisionLeft(map))
     {
       this->setNextMove(ALLEGRO_KEY_LEFT, map);
@@ -99,8 +96,7 @@ void B::chasePacman(std::vector<std::vector<char>> map, int pacX, int pacY)
     }
   }
   else if (bX < pacX && bY == pacY)
-  { // B is to the left of Pacman and at the same height as Pacman
-    // PRIORITY: MOVE RIGHT -> MOVE DOWN
+  {
     if (currentMove != LEFT && checkEntityCollisionRight(map))
     {
       this->setNextMove(ALLEGRO_KEY_RIGHT, map);
@@ -123,8 +119,7 @@ void B::chasePacman(std::vector<std::vector<char>> map, int pacX, int pacY)
     }
   }
   else if (bX == pacX && bY < pacY)
-  { // B is in the same column as Pacman and above Pacman
-    // PRIORITY: MOVE DOWN -> MOVE HORIZONTALLY
+  {
     if (currentMove != UP && checkEntityCollisionDown(map))
     {
       this->setNextMove(ALLEGRO_KEY_DOWN, map);
@@ -147,8 +142,7 @@ void B::chasePacman(std::vector<std::vector<char>> map, int pacX, int pacY)
     }
   }
   else if (bX == pacX && bY > pacY)
-  { // B is in the same column as Pacman and below Pacman
-    // PRIORITY: MOVE UP -> MOVE HORIZONTALLY
+  {
     if (currentMove != DOWN && checkEntityCollisionUp(map))
     {
       this->setNextMove(ALLEGRO_KEY_UP, map);
@@ -171,8 +165,7 @@ void B::chasePacman(std::vector<std::vector<char>> map, int pacX, int pacY)
     }
   }
   else if (bX < pacX && bY > pacY)
-  { // B is to the left of Pacman and below Pacman
-    // PRIORITY: MOVE RIGHT -> MOVE UP
+  {
     if (currentMove != LEFT && checkEntityCollisionRight(map))
     {
       this->setNextMove(ALLEGRO_KEY_RIGHT, map);
@@ -195,8 +188,7 @@ void B::chasePacman(std::vector<std::vector<char>> map, int pacX, int pacY)
     }
   }
   else if (bX < pacX && bY < pacY)
-  { // B is to the left of Pacman and above Pacman
-    // PRIORITY: MOVE RIGHT -> MOVE DOWN
+  {
     if (currentMove != LEFT && checkEntityCollisionRight(map))
     {
       this->setNextMove(ALLEGRO_KEY_RIGHT, map);
